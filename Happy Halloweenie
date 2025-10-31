@@ -1,107 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🎃 Happy Halloweenie Maze 🎃</title>
-  <style>
-    body {
-      margin: 0;
-      background-color: black;
-      color: orange;
-      font-family: "Press Start 2P", cursive;
-      text-align: center;
-      overflow: hidden;
-    }
-    canvas {
-      display: block;
-      margin: 20px auto;
-      background-color: #222;
-      border: 4px solid orange;
-      border-radius: 12px;
-    }
-    h1 {
-      margin-top: 20px;
-      text-shadow: 0 0 10px orange;
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>🎃 Halloween Maze 🎃</title>
+<style>
+  body {
+    margin: 0;
+    background-color: black;
+    color: orange;
+    font-family: "Press Start 2P", cursive;
+    text-align: center;
+    overflow: hidden;
+    user-select: none;
+  }
+  canvas {
+    display: block;
+    margin: 20px auto;
+    background-color: #222;
+    border: 4px solid orange;
+    border-radius: 12px;
+    touch-action: none;
+  }
+  h1 {
+    margin-top: 20px;
+    text-shadow: 0 0 10px orange;
+    font-size: 1rem;
+  }
+</style>
 </head>
 <body>
-  <h1>🎃 Halloween Maze 🎃</h1>
-  <canvas id="maze" width="400" height="400"></canvas>
-  <audio id="bgm" loop preload="auto" 
-    src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/Its_time_for_adventure/Komiku_-_12_-_Ghost_Chiptune.mp3"></audio>
+<h1>🎃 Happy Halloweenie Maze 🎃</h1>
+<canvas id="maze" width="400" height="400"></canvas>
 
-  <script>
-    const canvas = document.getElementById("maze");
-    const ctx = canvas.getContext("2d");
-    const bgm = document.getElementById("bgm");
-    bgm.volume = 0.4;
-    bgm.play().catch(()=>{});
+<audio id="bgm" loop preload="auto" autoplay>
+  <source src="https://files.freemusicarchive.org/storage-freemusicarchive-org/music/no_curator/Komiku/Its_time_for_adventure/Komiku_-_12_-_Ghost_Chiptune.mp3" type="audio/mpeg">
+</audio>
 
-    const maze = [
-      "##########",
-      "#........#",
-      "#.####...#",
-      "#.#..#.#.#",
-      "#.#..#.#.#",
-      "#.#..#.#.#",
-      "#...####.#",
-      "#........#",
-      "########E#"
-    ];
+<script>
+// ===== Maze Setup =====
+const canvas = document.getElementById("maze");
+const ctx = canvas.getContext("2d");
+const bgm = document.getElementById("bgm");
+bgm.volume = 0.4;
+bgm.play().catch(()=>{}); // autoplay attempt
 
-    const cell = 40;
-    let player = { x: 1, y: 1 };
+const cell = 20; // smaller cells to fit big maze
+let player = {x:1,y:1};
 
-    function drawMaze() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      for (let y = 0; y < maze.length; y++) {
-        for (let x = 0; x < maze[y].length; x++) {
-          if (maze[y][x] === "#") {
-            ctx.fillStyle = "#444";
-            ctx.fillRect(x * cell, y * cell, cell, cell);
-          } else if (maze[y][x] === "E") {
-            ctx.fillStyle = "orange";
-            ctx.fillRect(x * cell, y * cell, cell, cell);
-          }
-        }
-      }
-      ctx.fillStyle = "lime";
-      ctx.beginPath();
-      ctx.arc(player.x * cell + cell / 2, player.y * cell + cell / 2, 10, 0, Math.PI * 2);
-      ctx.fill();
-    }
-
-    function move(dx, dy) {
-      const nx = player.x + dx;
-      const ny = player.y + dy;
-      if (maze[ny][nx] !== "#") {
-        player.x = nx;
-        player.y = ny;
-        drawMaze();
-        if (maze[ny][nx] === "E") {
-          alert("🎉 You Did It! Now Text 408-569-3271 For a Treat! 🎉");
-          player = { x: 1, y: 1 };
-          drawMaze();
-        }
-      }
-    }
-
-    drawMaze();
-
-    document.addEventListener("swiped-left", () => move(1, 0));
-    document.addEventListener("swiped-right", () => move(-1, 0));
-    document.addEventListener("swiped-up", () => move(0, -1));
-    document.addEventListener("swiped-down", () => move(0, 1));
-
-    // fallback: arrow keys
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "ArrowUp") move(0, -1);
-      if (e.key === "ArrowDown") move(0, 1);
-      if (e.key === "ArrowLeft") move(-1, 0);
-      if (e.key === "ArrowRight") move(1, 0);
-    });
-  </script>
-</body>
-</html>
+// 20x20 maze: '#' = wall, '.' = path, 'E' = exit
+const maze = [
+"####################",
+"#........#.........#",
+"#.####.#.#.#####.#.#",
+"#.#..#.#.#.....#.#.#",
+"#.#..#.#.#####.#.#.#",
+"#.#..#.#.#...#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#.#.#",
+"#.#..#.#.#.#.#.#
